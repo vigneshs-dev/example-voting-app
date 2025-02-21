@@ -19,12 +19,22 @@ jobs:
 
         steps:
         - name: Checkout code
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 1
 
         - name: Set up Python 3.11
           uses: actions/setup-python@v5
           with:
               python-version: 3.11
+
+        - name: Cache pip dependencies
+          uses: actions/cache@v3
+          with:
+            path: ~/.cache/pip
+            key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+            restore-keys: |
+              ${{ runner.os }}-pip-
 
         - name: Install dependencies
           run: |
@@ -37,12 +47,13 @@ jobs:
 
     build:
         name: Build and Push Multi-Arch Docker Image
-        needs: lint
         runs-on: ubuntu-latest
 
         steps:
         - name: Checkout Code
           uses: actions/checkout@v4
+          with:
+            fetch-depth: 1
 
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v3
@@ -63,6 +74,8 @@ jobs:
             tags: |
               vigneshvicky97/vote:${{ github.run_id }}
               vigneshvicky97/vote:latest
+            cache-from: type=registry,ref=vigneshvicky97/vote:latest
+            cache-to: type=inline
 
     update-k8s-manifests:
         runs-on: ubuntu-latest
@@ -70,9 +83,10 @@ jobs:
 
         steps:
         - name: Checkout code
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
           with:
             token: ${{ secrets.TOKEN }}
+            fetch-depth: 1
 
         - name: Update tag in k8s deployment manifests
           run: |
