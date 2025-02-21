@@ -70,7 +70,7 @@ jobs:
         - name: Checkout code
           uses: actions/checkout@v2
           with:
-            token: ${{ secrets.GITHUB_TOKEN }}
+            token: ${{ secrets.TOKEN }}
 
         - name: Update tag in k8s deployment manifests
           run: |
