@@ -4,9 +4,13 @@ on:
     push:
         branches:
         - main
+        paths:
+        - 'vote/**'
     pull_request:
         branches:
         - main
+        paths:
+        - 'vote/**'
 
 jobs:
     lint:
