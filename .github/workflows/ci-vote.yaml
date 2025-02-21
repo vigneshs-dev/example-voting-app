@@ -55,5 +55,6 @@ jobs:
             context: vote
             file: vote/Dockerfile
             push: true
-            tags: ${{ secrets.DOCKER_USERNAME }}/vote:${{ github.run_id }}
+            # tags: ${{ secrets.DOCKER_USERNAME }}/vote:${{ github.run_id }}
+            tags: vigneshvicky97/vote:${{ github.run_id }}
             
